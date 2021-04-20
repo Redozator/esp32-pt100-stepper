@@ -1,0 +1,135 @@
+
+// температуру в график
+void tempToChart() {
+  for (int i = 1; i < CNT_CHART; i++) {
+    if (chart_y[i] > 0) {
+      chart_y[i - 1] = chart_y[i];
+      chart_stepper[i - 1] = chart_stepper[i];
+    } else {
+      chart_y[i - 1] = 0;
+      chart_stepper[i - 1] = 0;
+    }
+    chart_y[CNT_CHART - 1] = tempers[POINTS - 1];
+    chart_stepper[CNT_CHART - 1] = stepper_position;
+  }
+}
+
+String task_water(int n){
+  if(n>0) {
+    water_open(n);
+  } else {
+    water_close(-n);
+  }
+  String ptr = "<!DOCTYPE html> <html>\n\
+  <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
+   <head>\n\
+      <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css\" integrity=\"sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l\" crossorigin=\"anonymous\">\n\
+      <script src=\"https://code.jquery.com/jquery-3.6.0.min.js\" integrity=\"sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=\" crossorigin=\"anonymous\"></script>\n\
+      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js\" integrity=\"sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF\" crossorigin=\"anonymous\"></script>\n\
+      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns\" crossorigin=\"anonymous\"></script>\n\
+      <title>Task</title>\n\
+   </head>\n\
+\n\
+   <body>\n\
+      <script language = 'JavaScript'>\n\
+        window.location.href = \"/\";\n\
+      </script>\n\
+   </body>\n\
+</html>\n\
+";
+  return ptr;
+}
+
+String SendHTML() {
+  String ptr = "<!DOCTYPE html> <html>\n\
+  <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
+   <head>\n\
+      <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css\" integrity=\"sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l\" crossorigin=\"anonymous\">\n\
+      <script src=\"https://code.jquery.com/jquery-3.6.0.min.js\" integrity=\"sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=\" crossorigin=\"anonymous\"></script>\n\
+      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js\" integrity=\"sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF\" crossorigin=\"anonymous\"></script>\n\
+      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns\" crossorigin=\"anonymous\"></script>\n\
+      <title>График температуры</title>\n\
+      <script type = 'text/javascript' src = 'https://www.gstatic.com/charts/loader.js'>\n\
+      </script>\n\
+      <script type = 'text/javascript'>\n\
+         google.charts.load('current', {packages: ['corechart','line']});  \n\
+      </script>\n\
+   </head>\n\
+\n\
+   <body>\n\
+      <div class=\"container-fluid py-3\">\n\
+      <a href='/water_open' class=\"btn btn-success\">Открыть воду</a><a href='/water_close' class=\"btn btn-danger mx-3\">Прикрыть воду</a>\n\
+      <div class=\"row\">\n\
+      <div id = 'container' class=\"col\" >\n\
+      </div>\n\
+      </div>\n\
+      </div>\n\
+      <script language = 'JavaScript'>\n\
+         function drawChart() {\n\
+            \n\
+            var data = new google.visualization.DataTable();\n\
+            data.addColumn('number', 'Время');\n\
+            data.addColumn('number', 'Текущая');\n\
+            data.addColumn('number', 'Расчетная');\n\
+            data.addColumn('number', 'Заслонка');\n";
+      calcMatrix(); //расчет коэффициентов полинома
+      char TempString[10];
+      for (int i = 0; i < CNT_CHART; i++) {
+        double calc = 0;
+        if (chart_y[i] > 0) {
+          if(i>CNT_CHART-POINTS) {
+            calc = a_koef[0];
+            for (int j = 1; j < STEPEN; j++) {
+              calc += a_koef[j] * pow(i-CNT_CHART+POINTS+2, j);
+            }
+          }
+          String s_calc;
+          if(!calc) {
+            s_calc = "null";
+          } else {
+            s_calc = dtostrf(calc, 3, 1, TempString);
+          }
+          ptr += "data.addRow([" + String(i) + "," + dtostrf(chart_y[i], 3, 1, TempString) + "," + s_calc + "," + String(chart_stepper[i]) +"]);\n";
+        }
+      }
+      // будущие точки
+      for (int i = 0; i < 3; i++) {
+        double calc = 0;
+        calc = a_koef[0];
+        for (int j = 1; j < STEPEN; j++) {
+              calc += a_koef[j] * pow(i+POINTS+2, j);
+         }
+         ptr += "data.addRow([" + String(CNT_CHART+i) + ",null," + dtostrf(calc, 3, 1, TempString) + ",null]);\n";
+      }
+    
+      ptr += "var options = {'title' : 'Температура',\n\
+              series: { \n\
+                0: {targetAxisIndex: 1},\n\
+                1: {targetAxisIndex: 1, curveType: 'function'},\n\
+                2: {targetAxisIndex: 0}\n\
+              },\n\
+               hAxis: {\n\
+                  title: 'Время'\n\
+               },\n\
+               vAxis: {\n\
+                  0: {title: 'Заслонка'},\n\
+                  1: {title: 'Температура'}\n\
+               },   \n\
+               trendlines: {\n\
+                 0:{type: 'polynomial', degree: 5, color: '#333', opacity: 1, visibleInLegend: false}\n\
+               },\n\
+               'width':800,\n\
+                     'height':400,\n\
+                     pointsVisible: false \n\
+                  };\n\
+\n\
+            var chart = new google.visualization.LineChart(document.getElementById('container'));\n\
+            chart.draw(data, options);\n\
+         }\n\
+         google.charts.setOnLoadCallback(drawChart);\n\
+      </script>\n\
+   </body>\n\
+</html>\n\
+";
+  return ptr;
+}
