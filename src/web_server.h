@@ -1,10 +1,8 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
-// const char* ssid = "vlak";
-// const char* password = "15662747";
-const char* ssid = "Iphone stt 11 pro";
-const char* password = "463524777";
+const char* ssid = "vlak";
+const char* password = "15662747";
 WebServer server(80);
 
 IPAddress ip;
@@ -31,17 +29,17 @@ void webserver_init() {
   server.on("/water_open", handle_water_open);
   server.on("/water_close", handle_water_close);
   server.onNotFound(handle_NotFound);
-  server.begin();  
+  server.begin();
 }
 
 void handle_OnConnect() {
-  server.send(200, "text/html", SendHTML()); 
+  server.send(200, "text/html", SendHTML());
 }
 void handle_water_open() {
-  server.send(200, "text/html", task_water(1)); 
+  server.send(200, "text/html", task_water(1));
 }
 void handle_water_close() {
-  server.send(200, "text/html", task_water(-1)); 
+  server.send(200, "text/html", task_water(-1));
 }
 
 void handle_NotFound(){
