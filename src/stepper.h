@@ -18,9 +18,9 @@ void water_open(int n) {
     n = stepper_max-stepper_position;
   }
   stepper_position = stepper_position + n;
-  stepper.step(-1 * n * stepper_d);
+  stepper.step(n * stepper_d);
   Serial.print("water_open");
-  Serial.println(-1 * n * stepper_d);
+  Serial.println(n * stepper_d);
 }
 
 void water_close(int n) {
@@ -28,9 +28,9 @@ void water_close(int n) {
     n = stepper_position - 1;
   }
   stepper_position = stepper_position - n;
-  stepper.step(n * stepper_d);
+  stepper.step(-1 * n * stepper_d);
   Serial.print("water_close");
-  Serial.println(n * stepper_d);
+  Serial.println(-1 * n * stepper_d);
 }
 
 void check_temper() {
