@@ -23,21 +23,20 @@ void etap1() {
 //
 void etap2() {
 	double d_temp = tempers[POINTS-1]-tempers[POINTS-2];
-	if(d_temp<0 && prognoz1<tempers[POINTS-1]) {
-		water_close(1);
-		stepper_pause = 4;
-		return;
-	}
-	if(d_temp>0.5 && tempers[POINTS-2]-tempers[POINTS-3]>0){
+	if(tempers[POINTS-1]>PRED_LIMIT){
 		if(stepper_position==stepper_max) {
 			// заслонка открыта, видимо еще не среагировала система
 			return;
 		}
-		if(tempers[POINTS-1]>PRED_LIMIT) {
-			stepper_pause = 5;
-			current_etap = 3;
-			Serial.println("Переход на этап 3");
-		}
+		stepper_pause = 5;
+		current_etap = 3;
+		Serial.println("Переход на этап 3");
+	}
+	if(d_temp<0 && prognoz1<tempers[POINTS-1]) {
+		// температура понижается, а должна повышаться
+		water_close(1);
+		stepper_pause = 4;
+		return;
 	}
 	// если температура не двигается, ждем
 }
@@ -90,7 +89,7 @@ void etap4() {
 			return;
 		}
 	}
-	
+
 }
 
 // реагирование на температуру по этапу5
