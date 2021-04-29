@@ -73,7 +73,7 @@ String SendHTML() {
       <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js\" integrity=\"sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF\" crossorigin=\"anonymous\"></script>\n\
       <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns\" crossorigin=\"anonymous\"></script>\n\
       <script type = 'text/javascript' src = 'https://www.gstatic.com/charts/loader.js'>\n\
-      </script>\n\";
+      </script>\n";
       ptr += "<title>График температуры</title>\n\
       <script type = 'text/javascript'>\n\
          google.charts.load('current', {packages: ['corechart','line']});  \n\
@@ -93,7 +93,7 @@ String SendHTML() {
       <form action='/change_temp'>\n\
       Температура от <input type='text' name='min' value='"+String(limit_min)+"'> \n\
       Температура до <input type='text' name='max' value='"+String(limit_max)+"'> \n\
-      <input type="submit">\n\
+      <input type='submit'>\n\
       </form>\n\
       </div>\n\
       <script language = 'JavaScript'>\n\
