@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <stdlib.h>
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
 #include "aprox.h"

@@ -11,6 +11,7 @@ void webserver_init();
 void handle_OnConnect();
 void handle_water_open();
 void handle_water_close();
+void handle_change_temp();
 void handle_NotFound();
 
 
@@ -28,6 +29,7 @@ void webserver_init() {
   server.on("/", handle_OnConnect);
   server.on("/water_open", handle_water_open);
   server.on("/water_close", handle_water_close);
+  server.on("/change_temp", handle_change_temp);
   server.onNotFound(handle_NotFound);
   server.begin();
 }
@@ -40,6 +42,9 @@ void handle_water_open() {
 }
 void handle_water_close() {
   server.send(200, "text/html", task_water(-1));
+}
+void handle_change_temp(String min, String max) {
+  server.send(200, "text/html", change_temp(min, max));
 }
 
 void handle_NotFound(){
