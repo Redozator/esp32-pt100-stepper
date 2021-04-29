@@ -43,10 +43,14 @@ void handle_water_open() {
 void handle_water_close() {
   server.send(200, "text/html", task_water(-1));
 }
-void handle_change_temp(String min, String max) {
-  server.send(200, "text/html", change_temp(min, max));
+void handle_change_temp() {
+  if (server.hasArg("min") && server.hasArg("max")) {
+    server.send(200, "text/html", change_temp(server.arg("min"), server.arg("max")));
+  } else {
+    server.send(200, "text/plain", "min and max not found ");
+  }
 }
 
-void handle_NotFound(){
+void handle_NotFound() {
   server.send(404, "text/plain", "Not found");
 }

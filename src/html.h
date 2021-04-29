@@ -83,18 +83,18 @@ String SendHTML() {
    <body>\n\
       <div class=\"container-fluid py-3\">\n\
       <a href='/water_open' class=\"btn btn-success\">Открыть воду</a><a href='/water_close' class=\"btn btn-danger mx-3\">Прикрыть воду</a>\n\
-      <div class=\"row\">\n\
-      <div id = 'container' class=\"col\" >\n\
-      </div>\n\
-      </div>\n\
-      </div>\n\
       <div class=\"container-fluid py-3\">\n\
       Этап: "+String(current_etap)+" \n\
       <form action='/change_temp'>\n\
       Температура от <input type='text' name='min' value='"+String(limit_min)+"'> \n\
       Температура до <input type='text' name='max' value='"+String(limit_max)+"'> \n\
-      <input type='submit'>\n\
+      <input type='submit' value='Сохранить'>\n\
       </form>\n\
+      </div>\n\
+      <div class=\"row\">\n\
+      <div id = 'container' class=\"col\" >\n\
+      </div>\n\
+      </div>\n\
       </div>\n\
       <script language = 'JavaScript'>\n\
          function drawChart() {\n\
@@ -111,9 +111,9 @@ String SendHTML() {
 
       ptr += "var options = {'title' : 'Температура',\n\
               series: { \n\
-                0: {targetAxisIndex: 1},\n\
-                1: {targetAxisIndex: 1, curveType: 'function'},\n\
-                2: {targetAxisIndex: 0}\n\
+//                0: {targetAxisIndex: 1},\n\
+                0: {targetAxisIndex: 1, curveType: 'function'},\n\
+                1: {targetAxisIndex: 0}\n\
               },\n\
                hAxis: {\n\
                   title: 'Время'\n\
@@ -123,7 +123,7 @@ String SendHTML() {
                   1: {title: 'Температура'}\n\
                },   \n\
 //               trendlines: {\n\
-//                 0:{type: 'polynomial', degree: 5, color: '#333', opacity: 1, visibleInLegend: false}\n\
+//               0:{type: 'polynomial', degree: 5, color: '#333', opacity: 1, visibleInLegend: false}\n\
 //               },\n\
                'width':800,\n\
                      'height':400,\n\
