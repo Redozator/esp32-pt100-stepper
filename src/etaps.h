@@ -91,7 +91,8 @@ void etap4() {
 			stepper_pause = 10;
 			return;
 		}
-		if(tempers[POINTS-1]>tempers[POINTS-2]) {
+		if(prognoz2-tempers[POINTS-1]>2) {
+			// тенденция к увеличению. нужно добавить водички
 			water_open(1);
 			stepper_pause = 5;
 			return;
