@@ -24,8 +24,8 @@ void water_open(int n) {
 }
 
 void water_close(int n) {
-  if (stepper_position - n < 1) {
-    n = stepper_position - 1;
+  if (stepper_position - n < 0) {
+    n = stepper_position;
   }
   stepper_position = stepper_position - n;
   stepper.step(-1 * n * stepper_d);
