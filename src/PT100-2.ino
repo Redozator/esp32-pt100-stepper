@@ -7,25 +7,23 @@
 #include "etaps.h"
 #include "html.h"
 #include "stepper.h"
-#include "web_server.h"
-
 
 LiquidCrystal_I2C lcd(0x3F,20,4);  // set the LCD address to 0x3F for a 16 chars and 2 line display
+
+#include "web_server.h"
 
 int _state = 0;
 int _cycle = 0;
 
-
 void setup() {
   Serial.begin(115200);
+  lcd.init();                      // initialize the lcd
+  lcd.backlight();
+  lcd.setCursor(0, 0);
   webserver_init();
   stepper_setup();
 
 
-  lcd.init();                      // initialize the lcd
-  lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print(ip);
   showtemp();
 }
 
@@ -49,7 +47,6 @@ void loop() {
 
 void showtemp(){
   lcd.setCursor(0, 1);
-  lcd.print("T: ");
   lcd.print(tempers[POINTS-1], 1);
   lcd.print(" C     ");
 }

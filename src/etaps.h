@@ -77,7 +77,7 @@ void etap4() {
 				temp_temp=tempers[POINTS-1]; // пока не переходим на этап 3, но готовимся
 			} else {
 				if(temp_temp>tempers[POINTS-1]) { // температура продолжает падать, уходим на этап 3
-					temp_temp==0;
+					temp_temp=0;
 					current_etap = 3;
 					Serial.println("Возвращаемся на этап 3");
 				}
