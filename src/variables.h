@@ -1,4 +1,6 @@
 #define CNT_CHART 100
+#define outputPin  28 // GPIO17
+#define zerocross  27 // GPIO16
 
 double chart_y[CNT_CHART];
 int chart_stepper[CNT_CHART];
@@ -12,3 +14,5 @@ int limit_max = 71; //верхний предел температуры
 int stepper_d = 1000;  //количество минишагов в одном шаге
 
 int current_etap = 0; //текущий этап
+
+int dimmer_val = 50; //начальное значение диммера (мощность тэна)

@@ -9,6 +9,9 @@ double temp_temp; // временное значение температуры.
 // предполагается, что заслонка почти закрыта
 void etap1() {
 	if(tempers[POINTS-1]>PRED_LIMIT) {
+		// диммер - на половину
+		dimmer_val = 50;
+		dimmer.setPower(dimmer_val);
 		// открываем заслонку на максимум
 		water_open(stepper_max);
 		stepper_pause = 10;

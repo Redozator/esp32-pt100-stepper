@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
+#include <RBDdimmer.h>
 #include "aprox.h"
 #include "variables.h"
+dimmerLamp dimmer(outputPin, zerocross);
 #include "etaps.h"
 #include "html.h"
 #include "stepper.h"
 
-LiquidCrystal_I2C lcd(0x3F,20,4);  // set the LCD address to 0x3F for a 16 chars and 2 line display
+LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x3F for a 16 chars and 2 line display
 
 #include "web_server.h"
 
@@ -20,6 +22,8 @@ void setup() {
   lcd.init();                      // initialize the lcd
   lcd.backlight();
   lcd.setCursor(0, 0);
+  dimmer.begin(NORMAL_MODE, ON);
+  dimmer.setPower(dimmer_val);
   webserver_init();
   stepper_setup();
 
