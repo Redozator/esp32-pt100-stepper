@@ -4,6 +4,7 @@
 
 double chart_y[CNT_CHART];
 int chart_stepper[CNT_CHART];
+int chart_dimmer[CNT_CHART];
 
 int stepper_position = 0; //при включении подача воды должна быть в крайнем положении (перекрыта)
 int stepper_max = 20; //на сколько шагов максимально открываем воду

@@ -5,12 +5,15 @@ void tempToChart() {
     if (chart_y[i] > 0) {
       chart_y[i - 1] = chart_y[i];
       chart_stepper[i - 1] = chart_stepper[i];
+      chart_dimmer[i - 1] = chart_dimmer[i];
     } else {
       chart_y[i - 1] = 0;
       chart_stepper[i - 1] = 0;
+      chart_dimmer[i - 1] = 0;
     }
     chart_y[CNT_CHART - 1] = tempers[POINTS - 1];
     chart_stepper[CNT_CHART - 1] = stepper_position;
+    chart_dimmer[CNT_CHART - 1] = dimmer_val;
   }
 }
 
@@ -102,10 +105,11 @@ String SendHTML() {
             var data = new google.visualization.DataTable();\n\
             data.addColumn('number', 'Время');\n\
             data.addColumn('number', 'Текущая');\n\
+            data.addColumn('number', 'Тэн');\n\
             data.addColumn('number', 'Заслонка');\n";
       for (int i = 0; i < CNT_CHART; i++) {
         if (chart_y[i] > 0) {
-          ptr += "data.addRow([" + String(i) + "," + dtostrf(chart_y[i], 3, 1, TempString) + "," + String(chart_stepper[i]) +"]);\n";
+          ptr += "data.addRow([" + String(i) + "," + dtostrf(chart_y[i], 3, 1, TempString) + "," + String(chart_dimmer[i]) +"," + String(chart_stepper[i]) +"]);\n";
         }
       }
 
