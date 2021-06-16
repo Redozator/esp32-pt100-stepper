@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
-#include <RBDdimmer.h>
+#include "RBDmcuESP32.h"
 #include "aprox.h"
 #include "variables.h"
 dimmerLamp dimmer(outputPin, zerocross);
