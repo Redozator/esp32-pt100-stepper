@@ -1,6 +1,6 @@
 #define CNT_CHART 100
-#define outputPin  28 // GPIO17
-#define zerocross  27 // GPIO16
+#define outputPin  16
+#define zerocross  17
 
 double chart_y[CNT_CHART];
 int chart_stepper[CNT_CHART];

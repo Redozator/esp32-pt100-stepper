@@ -43,8 +43,8 @@ void water_close(int n) {
 	if (stepper_position < 1) {
 		// дальше уменьшать некуда, увеличим мощность тэна
 		dimmer_val++;
-		if (dimmer_val > 100) {
-			dimmer_val = 100;
+		if (dimmer_val > 74) { // больше 74х - глючит
+			dimmer_val = 74;
 		}
 		dimmer.setPower(dimmer_val);
 	}
