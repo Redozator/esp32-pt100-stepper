@@ -52,5 +52,6 @@ void loop() {
 void showtemp(){
   lcd.setCursor(0, 1);
   lcd.print(tempers[POINTS-1], 1);
-  lcd.print(" C     ");
+  lcd.print("C D");
+  lcd.print(dimmer_val);
 }
