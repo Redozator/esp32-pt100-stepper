@@ -1,29 +1,30 @@
 
 // температуру в график
+
 void tempToChart() {
-  for (int i = 1; i < CNT_CHART; i++) {
-    if (chart_y[i] > 0) {
-      chart_y[i - 1] = chart_y[i];
-      chart_stepper[i - 1] = chart_stepper[i];
-      chart_dimmer[i - 1] = chart_dimmer[i];
-    } else {
-      chart_y[i - 1] = 0;
-      chart_stepper[i - 1] = 0;
-      chart_dimmer[i - 1] = 0;
-    }
-    chart_y[CNT_CHART - 1] = tempers[POINTS - 1];
-    chart_stepper[CNT_CHART - 1] = stepper_position;
-    chart_dimmer[CNT_CHART - 1] = dimmer_val;
-  }
+	for (int i = 1; i < CNT_CHART; i++) {
+		if (chart_y[i] > 0) {
+			chart_y[i - 1] = chart_y[i];
+			chart_stepper[i - 1] = chart_stepper[i];
+			chart_dimmer[i - 1] = chart_dimmer[i];
+		} else {
+			chart_y[i - 1] = 0;
+			chart_stepper[i - 1] = 0;
+			chart_dimmer[i - 1] = 0;
+		}
+		chart_y[CNT_CHART - 1] = tempers[POINTS - 1];
+		chart_stepper[CNT_CHART - 1] = stepper_position;
+		chart_dimmer[CNT_CHART - 1] = dimmer_val;
+	}
 }
 
-String task_water(int n){
-  if(n>0) {
-    water_open(n);
-  } else {
-    water_close(-n);
-  }
-  String ptr = "<!DOCTYPE html> <html>\n\
+String task_water(int n) {
+	if (n > 0) {
+		water_open(n);
+	} else {
+		water_close(-n);
+	}
+	String ptr = "<!DOCTYPE html> <html>\n\
   <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
    <head>\n\
       <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css\" integrity=\"sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l\" crossorigin=\"anonymous\">\n\
@@ -40,13 +41,13 @@ String task_water(int n){
    </body>\n\
 </html>\n\
 ";
-  return ptr;
+	return ptr;
 }
 
 String change_temp(String min, String max) {
-  limit_min = atoi(min.c_str());
-  limit_max = atoi(max.c_str());
-  String ptr = "<!DOCTYPE html> <html>\n\
+	limit_min = atoi(min.c_str());
+	limit_max = atoi(max.c_str());
+	String ptr = "<!DOCTYPE html> <html>\n\
   <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
    <head>\n\
       <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css\" integrity=\"sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l\" crossorigin=\"anonymous\">\n\
@@ -63,12 +64,35 @@ String change_temp(String min, String max) {
    </body>\n\
 </html>\n\
 ";
-  return ptr;
+	return ptr;
+}
+
+String change_ten(String s_dimmer_val) {
+	dimmer_val = atoi(s_dimmer_val.c_str());
+	dimmer.setPower(dimmer_val);
+	String ptr = "<!DOCTYPE html> <html>\n\
+  <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
+   <head>\n\
+      <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css\" integrity=\"sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l\" crossorigin=\"anonymous\">\n\
+      <script src=\"https://code.jquery.com/jquery-3.6.0.min.js\" integrity=\"sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=\" crossorigin=\"anonymous\"></script>\n\
+      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js\" integrity=\"sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF\" crossorigin=\"anonymous\"></script>\n\
+      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns\" crossorigin=\"anonymous\"></script>\n\
+      <title>Task</title>\n\
+   </head>\n\
+\n\
+   <body>\n\
+      <script language = 'JavaScript'>\n\
+        window.location.href = \"/\";\n\
+      </script>\n\
+   </body>\n\
+</html>\n\
+";
+	return ptr;
 }
 
 String SendHTML() {
-  char TempString[10];
-  String ptr = "<!DOCTYPE html> <html>\n\
+	char TempString[10];
+	String ptr = "<!DOCTYPE html> <html>\n\
   <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
    <head>\n\
       <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css\" integrity=\"sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l\" crossorigin=\"anonymous\">\n\
@@ -77,7 +101,7 @@ String SendHTML() {
       <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns\" crossorigin=\"anonymous\"></script>\n\
       <script type = 'text/javascript' src = 'https://www.gstatic.com/charts/loader.js'>\n\
       </script>\n";
-      ptr += "<title>График температуры</title>\n\
+	ptr += "<title>График температуры</title>\n\
       <script type = 'text/javascript'>\n\
          google.charts.load('current', {packages: ['corechart','line']});  \n\
       </script>\n\
@@ -87,10 +111,14 @@ String SendHTML() {
       <div class=\"container-fluid py-3\">\n\
       <a href='/water_open' class=\"btn btn-success\">Открыть воду</a><a href='/water_close' class=\"btn btn-danger mx-3\">Прикрыть воду</a>\n\
       <div class=\"container-fluid py-3\">\n\
-      Этап: "+String(current_etap)+" \n\
+      Этап: " + String(current_etap) + " \n\
+      <form action='/change_ten'>\n\
+      Мощность нагрева, % (1-95) <input type='text' name='dimmer_val' value='" + String(dimmer_val) + "'> \n\
+      <input type='submit' value='Сохранить'>\n\
+      </form>\n\
       <form action='/change_temp'>\n\
-      Температура от <input type='text' name='min' value='"+String(limit_min)+"'> \n\
-      Температура до <input type='text' name='max' value='"+String(limit_max)+"'> \n\
+      Температура от <input type='text' name='min' value='" + String(limit_min) + "'> \n\
+      Температура до <input type='text' name='max' value='" + String(limit_max) + "'> \n\
       <input type='submit' value='Сохранить'>\n\
       </form>\n\
       </div>\n\
@@ -107,13 +135,13 @@ String SendHTML() {
             data.addColumn('number', 'Текущая');\n\
             data.addColumn('number', 'Тэн');\n\
             data.addColumn('number', 'Заслонка');\n";
-      for (int i = 0; i < CNT_CHART; i++) {
-        if (chart_y[i] > 0) {
-          ptr += "data.addRow([" + String(i) + "," + dtostrf(chart_y[i], 3, 1, TempString) + "," + String(chart_dimmer[i]) +"," + String(chart_stepper[i]) +"]);\n";
-        }
-      }
+	for (int i = 0; i < CNT_CHART; i++) {
+		if (chart_y[i] > 0) {
+			ptr += "data.addRow([" + String(i) + "," + dtostrf(chart_y[i], 3, 1, TempString) + "," + String(chart_dimmer[i]) + "," + String(chart_stepper[i]) + "]);\n";
+		}
+	}
 
-      ptr += "var options = {'title' : 'Температура',\n\
+	ptr += "var options = {'title' : 'Температура',\n\
               series: { \n\
 //                0: {targetAxisIndex: 1},\n\
                 0: {targetAxisIndex: 1, curveType: 'function'},\n\
@@ -142,5 +170,32 @@ String SendHTML() {
    </body>\n\
 </html>\n\
 ";
-  return ptr;
+	return ptr;
 }
+
+String debug_temp() {
+	char TempString[10];
+	String ptr = "<!DOCTYPE html> <html>\n\
+  <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
+   <head>\n\
+      <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css\" integrity=\"sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l\" crossorigin=\"anonymous\">\n\
+      <script src=\"https://code.jquery.com/jquery-3.6.0.min.js\" integrity=\"sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=\" crossorigin=\"anonymous\"></script>\n\
+      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js\" integrity=\"sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF\" crossorigin=\"anonymous\"></script>\n\
+      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns\" crossorigin=\"anonymous\"></script>\n\
+      <title>Task</title>\n\
+   </head>\n\
+\n\
+   <body>\n ";
+	for (int i = 0; i < 100; i++) {
+		if (debug_temper[i] > 0) {
+			double t = (double) round(10 * (debug_temper[i] / 7.15 + 15.4)) / 10;
+			ptr += "<div>" + String(debug_temper[i]) + " " + dtostrf(t, 4, 2, TempString) + "</div>\n";
+		}
+	}
+	ptr += "</body>\n\
+</html>\n\
+";
+	return ptr;
+}
+
+

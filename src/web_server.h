@@ -15,6 +15,8 @@ void handle_OnConnect();
 void handle_water_open();
 void handle_water_close();
 void handle_change_temp();
+void handle_change_ten();
+void handle_debug_temp();
 void handle_NotFound();
 
 /*
@@ -129,6 +131,7 @@ void webserver_init() {
 	server.on("/water_open", handle_water_open);
 	server.on("/water_close", handle_water_close);
 	server.on("/change_temp", handle_change_temp);
+	server.on("/change_ten", handle_change_ten);
 	server.on("/ota", HTTP_GET, []() {
 		server.sendHeader("Connection", "close");
 		server.send(200, "text/html", loginIndex);
@@ -162,6 +165,7 @@ void webserver_init() {
 			}
 		}
 	});
+	server.on("/debug_temp", handle_debug_temp);
 	server.onNotFound(handle_NotFound);
 	server.begin();
 }
@@ -184,6 +188,18 @@ void handle_change_temp() {
 	} else {
 		server.send(200, "text/plain", "min and max not found ");
 	}
+}
+
+void handle_change_ten() {
+	if (server.hasArg("dimmer_val")) {
+		server.send(200, "text/html", change_ten(server.arg("dimmer_val")));
+	} else {
+		server.send(200, "text/plain", "dimmer_val not found ");
+	}
+}
+
+void handle_debug_temp() {
+	server.send(200, "text/html", debug_temp() );
 }
 
 void handle_NotFound() {

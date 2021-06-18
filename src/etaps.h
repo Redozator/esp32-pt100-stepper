@@ -30,6 +30,12 @@ void etap2() {
 	if(tempers[POINTS-1]>PRED_LIMIT){
 		if(stepper_position==stepper_max) {
 			// заслонка открыта, видимо еще не среагировала система
+			// но на всякий случай проверим, не сильно ли поднялась температура
+			if(tempers[POINTS-1]>limit_min) {
+				// прыгаем сразу на 4 этап
+				current_etap = 4;
+				Serial.println("Прыжок на этап 4");
+			}
 			return;
 		}
 		stepper_pause = 5;

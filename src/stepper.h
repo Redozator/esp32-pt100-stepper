@@ -43,8 +43,8 @@ void water_close(int n) {
 	if (stepper_position < 1) {
 		// дальше уменьшать некуда, увеличим мощность тэна
 		dimmer_val++;
-		if (dimmer_val > 73) { // больше 73х - глючит
-			dimmer_val = 73;
+		if (dimmer_val > 95) {
+			dimmer_val = 95;
 		}
 		dimmer.setPower(dimmer_val);
 	}
@@ -54,10 +54,12 @@ void check_temper() {
 	float results;
 	float sum = 0;
 	float cnt = 0;
-	for (int i = 1; i <= 10; i++) {
-		sum += ads.readADC_Differential_0_1();
+	for (int i = 1; i <= 100; i++) {
+		float ads_value = ads.readADC_Differential_0_1();
+		sum += ads_value;
+		debug_temper[i-1] = ads_value;
 		cnt++;
-		delay(10);
+		delay(1);
 	}
 	// средняя величина разности на входах 0 и 1 АЦП
 	results = sum / cnt;
@@ -66,7 +68,8 @@ void check_temper() {
 		Serial.print(tempers[i - 1], 1);
 		Serial.print(" ");
 	}
-	tempers[POINTS - 1] = (float) round(10 * (results / 11.23 + 15)) / 10;
+//	tempers[POINTS - 1] = (float) round(10 * (results / 11.23 + 15)) / 10; // 5v
+	tempers[POINTS - 1] = (float) round(10 * (results / 7.15 + 15.4)) / 10;  // 3.3v
 	tempToChart();
 	Serial.print(tempers[POINTS - 1], 1);
 	if (stepper_pause > 0) {
