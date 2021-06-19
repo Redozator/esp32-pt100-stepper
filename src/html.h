@@ -1,4 +1,7 @@
 
+#include "RBDmcuESP32.h"
+
+
 // температуру в график
 
 void tempToChart() {
@@ -186,6 +189,12 @@ String debug_temp() {
    </head>\n\
 \n\
    <body>\n ";
+	unsigned long a = dimmer.getDebug_timer();
+	if(a==0) {
+		a = 1;
+	}
+	unsigned long time = micros();
+	ptr += "<div>debug_timer=" + String(a) + " (" + String(time/a) +")</div>\n";
 	for (int i = 0; i < 100; i++) {
 		if (debug_temper[i] > 0) {
 			double t = (double) round(10 * (debug_temper[i] / 7.15 + 15.4)) / 10;
