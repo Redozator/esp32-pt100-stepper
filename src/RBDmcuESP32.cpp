@@ -10,8 +10,6 @@ char user_zero_cross = '0';
 static int toggleCounter = 0;
 static int toggleReload = 25;
 static unsigned long debug_timer = 0;
-static int zeroCounter = 0;
-static int zeroReload = 120;
 
 static dimmerLamp* dimmer[ALL_DIMMERS];
 volatile uint16_t dimPower[ALL_DIMMERS];
@@ -54,17 +52,15 @@ void dimmerLamp::timer_init(void) {
 	timerAttachInterrupt(timer, &onTimerISR, true);
 	// Set alarm to call onTimer function every second (value in microseconds).
 	// Repeat the alarm (third parameter)
-	timerAlarmWrite(timer, 200, true);
+	timerAlarmWrite(timer, 90, true); // вызов таймера через каждые 90 микросекунд
 	// Start an alarm
 	timerAlarmEnable(timer);
 }
 
 void dimmerLamp::ext_int_init(void) {
 	int inPin = dimZCPin[this->current_num];
-	// что-то не работает прерывание. по всякому пробовал. Работает только если питание не подавать на диммер.
-	// но при этом прерывание вызывается слишком часто. Явно неправильно
-//  pinMode(inPin, INPUT_PULLUP); 
-  attachInterrupt(inPin, isr_ext, RISING);
+	pinMode(inPin, INPUT_PULLUP);
+	attachInterrupt(inPin, isr_ext, RISING);
 }
 
 void dimmerLamp::begin(DIMMER_MODE_typedef DIMMER_MODE, ON_OFF_typedef ON_OFF) {
@@ -133,25 +129,20 @@ void dimmerLamp::toggleSettings(int minValue, int maxValue) {
 }
 
 void IRAM_ATTR isr_ext() {
-//	zeroCounter++;
-//	if (zeroCounter > zeroReload) { // что-то через ноль проходим каждые 65 микросекунд. Увеличим
-//		zeroCounter = 0;
-		for (int i = 0; i < current_dim; i++)
-			if (dimState[i] == ON) {
-				zeroCross[i] = 1;
-				// при нуле отключаем питание
-				digitalWrite(dimOutPin[i], LOW);
-				debug_timer++;
-				dimCounter[i] = 0;
-			}
-//	}
+	debug_timer++;
+	for (int i = 0; i < current_dim; i++)
+		if (dimState[i] == ON) {
+			zeroCross[i] = 1;
+			// при нуле отключаем питание
+			digitalWrite(dimOutPin[i], LOW);
+			dimCounter[i] = 0;
+		}
 }
 
 static int k;
 
 void IRAM_ATTR onTimerISR() {
-	//	unsigned long time = micros();
-	//	debug_timer = time-debug_timer;
+//	debug_timer++;
 	toggleCounter++;
 	for (k = 0; k < current_dim; k++) {
 		if (zeroCross[k] == 1) {

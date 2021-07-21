@@ -194,7 +194,8 @@ String debug_temp() {
 		a = 1;
 	}
 	unsigned long time = micros();
-	ptr += "<div>debug_timer=" + String(a) + " (" + String(time/a) +")</div>\n";
+	int av = time/a; 
+	ptr += "<div>debug_timer=" + String(a) + " (среднее время в микросекундах: " + String(av) +". Частота " + String(1000000/av) + " в секунду)</div>\n";
 	for (int i = 0; i < 100; i++) {
 		if (debug_temper[i] > 0) {
 			double t = (double) round(10 * (debug_temper[i] / 7.15 + 15.4)) / 10;
