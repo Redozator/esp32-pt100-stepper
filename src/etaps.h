@@ -96,9 +96,8 @@ void etap4() {
 	if(tempers[POINTS-1]<(limit_min-1)) {
 		if(tempers[POINTS-1]<tempers[POINTS-2]) { // падает температура
 			dimmer_val++; // увеличим диммер
-			if (dimmer_val > 95) {
-				dimmer_val = 95;
-				water_close(1); // прикроем заслонку
+			if (dimmer_val > dimmer_critic) {
+				dimmer_val = dimmer_critic;
 			}
 			dimmer.setPower(dimmer_val);
 			stepper_pause = 4;
@@ -117,12 +116,13 @@ void etap4() {
 	if(tempers[POINTS-1]>seredina) {
 		if(tempers[POINTS-1]>limit_max) {
 			// превышен максимум, уменьшаем тэн
-			dimmer_val -= 5;
+			dimmer_critic = dimmer_val;
+			dimmer_val -= 3;
 			if (dimmer_val < 0) {
 				dimmer_val = 0;
 			}
 			dimmer.setPower(dimmer_val);
-			stepper_pause = 10;
+			stepper_pause = 5;
 			return;
 		}
 		if(prognoz2-tempers[POINTS-1]>2) {

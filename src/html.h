@@ -50,6 +50,7 @@ String task_water(int n) {
 String change_temp(String min, String max) {
 	limit_min = atoi(min.c_str());
 	limit_max = atoi(max.c_str());
+	dimmer_critic = 95; // при изменении пределов температуры, инициализируем dimmer_critic
 	String ptr = "<!DOCTYPE html> <html>\n\
   <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
    <head>\n\
