@@ -22,14 +22,6 @@ void water_open(int n) {
 	stepper.step(n * stepper_d);
 	Serial.print("water_open");
 	Serial.println(n * stepper_d);
-	if (stepper_position >= stepper_max) {
-		// дальше увеличивать некуда, уменьшим мощность тэна
-		dimmer_val -= 5;
-		if (dimmer_val < 10) {
-			dimmer_val = 10;
-		}
-		dimmer.setPower(dimmer_val);
-	}
 }
 
 void water_close(int n) {
@@ -40,14 +32,6 @@ void water_close(int n) {
 	stepper.step(-1 * n * stepper_d);
 	Serial.print("water_close");
 	Serial.println(-1 * n * stepper_d);
-	if (stepper_position < 1) {
-		// дальше уменьшать некуда, увеличим мощность тэна
-		dimmer_val++;
-		if (dimmer_val > 95) {
-			dimmer_val = 95;
-		}
-		dimmer.setPower(dimmer_val);
-	}
 }
 
 void check_temper() {

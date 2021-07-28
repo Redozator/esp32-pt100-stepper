@@ -9,11 +9,11 @@ double temp_temp; // временное значение температуры.
 // предполагается, что заслонка почти закрыта
 void etap1() {
 	if(tempers[POINTS-1]>PRED_LIMIT) {
-		// диммер - на половину
-		dimmer_val = 50;
+		// диммер - на низкое значение
+		dimmer_val = dimmer_low;
 		dimmer.setPower(dimmer_val);
 		// открываем заслонку на максимум
-		water_open(stepper_max);
+		water_open(stepper_max/2);
 		stepper_pause = 10;
 		current_etap = 2;
 		Serial.println("Переход на этап 2");
@@ -21,30 +21,40 @@ void etap1() {
 }
 
 // реагирование на температуру по этапу2
-// в начале этапа заслонка открыта на максимум
-// закрываем заслонку, пока температура не начнет увеличиваться
+// увеличиваем диммер, пока температура не начнет увеличиваться
 // когда температура будет увеличиваться и перейдет 50 градусов, переходим на следующий этап
 //
 void etap2() {
 	double d_temp = tempers[POINTS-1]-tempers[POINTS-2];
 	if(tempers[POINTS-1]>PRED_LIMIT){
-		if(stepper_position==stepper_max) {
-			// заслонка открыта, видимо еще не среагировала система
+		if(dimmer_val<=dimmer_low) {
+			// видимо еще не среагировала система
 			// но на всякий случай проверим, не сильно ли поднялась температура
 			if(tempers[POINTS-1]>limit_min) {
-				// прыгаем сразу на 4 этап
-				current_etap = 4;
-				Serial.println("Прыжок на этап 4");
+				dimmer_val -= 5;
+				if (dimmer_val < 0) {
+					dimmer_val = 0;
+				}
+				dimmer.setPower(dimmer_val);
 			}
 			return;
 		}
+		dimmer_val--;
+		if (dimmer_val < 0) {
+			dimmer_val = 0;
+		}
+		dimmer.setPower(dimmer_val);
 		stepper_pause = 5;
 		current_etap = 3;
 		Serial.println("Переход на этап 3");
 	}
 	if(d_temp<0 && prognoz1<tempers[POINTS-1]) {
 		// температура понижается, а должна повышаться
-		water_close(1);
+		dimmer_val++;
+		if (dimmer_val > 95) {
+			dimmer_val = 95;
+		}
+		dimmer.setPower(dimmer_val);
 		stepper_pause = 4;
 		return;
 	}
@@ -67,9 +77,14 @@ void etap3() {
 		return;
 	}
 	double d_temp = tempers[POINTS-1]-tempers[POINTS-2];
-	// если температура никуда не движется, нужно заслонку прикрыть
+	// если температура никуда не движется, нужно добавить температуру
 	if(d_temp<0.2 && d_temp>-0.2 && tempers[POINTS-1]-prognoz2<=0.2 && tempers[POINTS-1]-prognoz2>=-0.2) {
-		water_close(1);
+		dimmer_val++;
+		if (dimmer_val > 95) {
+			dimmer_val = 95;
+			water_close(1); // прикроем заслонку
+		}
+		dimmer.setPower(dimmer_val);
 		stepper_pause = 4;
 	}
 }
@@ -79,8 +94,13 @@ void etap3() {
 void etap4() {
 	double seredina = (limit_min +limit_max) / 2;
 	if(tempers[POINTS-1]<(limit_min-1)) {
-		if(tempers[POINTS-1]<tempers[POINTS-2]) {
-			water_close(1);
+		if(tempers[POINTS-1]<tempers[POINTS-2]) { // падает температура
+			dimmer_val++; // увеличим диммер
+			if (dimmer_val > 95) {
+				dimmer_val = 95;
+				water_close(1); // прикроем заслонку
+			}
+			dimmer.setPower(dimmer_val);
 			stepper_pause = 4;
 			if(temp_temp==0 || temp_temp<tempers[POINTS-1]) {
 				temp_temp=tempers[POINTS-1]; // пока не переходим на этап 3, но готовимся
@@ -96,19 +116,33 @@ void etap4() {
 	}
 	if(tempers[POINTS-1]>seredina) {
 		if(tempers[POINTS-1]>limit_max) {
-			water_open(3); // превышен максимум, открываем воду побольше
+			// превышен максимум, уменьшаем тэн
+			dimmer_val -= 5;
+			if (dimmer_val < 0) {
+				dimmer_val = 0;
+			}
+			dimmer.setPower(dimmer_val);
 			stepper_pause = 10;
 			return;
 		}
 		if(prognoz2-tempers[POINTS-1]>2) {
-			// тенденция к увеличению. нужно добавить водички
-			water_open(1);
+			// тенденция к увеличению. нужно уменьшить диммер
+			dimmer_val--;
+			if (dimmer_val < 0) {
+				dimmer_val = 0;
+			}
+			dimmer.setPower(dimmer_val);
 			stepper_pause = 5;
 			return;
 		}
 	}
 	if(tempers[POINTS-1]<limit_min) {
-		water_close(1);
+		dimmer_val++; // увеличим диммер
+		if (dimmer_val > 95) {
+			dimmer_val = 95;
+			water_close(1); // прикроем заслонку
+		}
+		dimmer.setPower(dimmer_val);
 		stepper_pause = 5;
 		return;
 	}
