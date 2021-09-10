@@ -52,7 +52,8 @@ void dimmerLamp::timer_init(void) {
 	timerAttachInterrupt(timer, &onTimerISR, true);
 	// Set alarm to call onTimer function every second (value in microseconds).
 	// Repeat the alarm (third parameter)
-	timerAlarmWrite(timer, 90, true); // вызов таймера через каждые 90 микросекунд
+//	timerAlarmWrite(timer, 90, true); // вызов таймера через каждые 90 микросекунд
+	timerAlarmWrite(timer, 100, true); // вызов таймера через каждые 100 микросекунд
 	// Start an alarm
 	timerAlarmEnable(timer);
 }
@@ -60,6 +61,7 @@ void dimmerLamp::timer_init(void) {
 void dimmerLamp::ext_int_init(void) {
 	int inPin = dimZCPin[this->current_num];
 	pinMode(inPin, INPUT_PULLUP);
+//	pinMode(inPin, INPUT_PULLDOWN);
 	attachInterrupt(inPin, isr_ext, RISING);
 }
 
@@ -168,7 +170,7 @@ void IRAM_ATTR onTimerISR() {
 
 			// При нуле выключаем, а через определенное число циклов включаем
 			// Чем больше циклов пропустить, тем меньше мощности на потребителя.
-			// Соответственно циклов должно быть 100 от зеро до зеро. А это 200 микросекунд (1/5000 секунды)
+			// Соответственно циклов должно быть 100 от зеро до зеро.
 			if (dimCounter[k] >= dimPulseBegin[k]) {
 				if (dimPower[k] <= 0) {
 					digitalWrite(dimOutPin[k], LOW); // power=0, вообще никогда не включаем питание
