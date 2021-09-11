@@ -14,14 +14,24 @@ void stepper_setup() {
 	stepper.setSpeed(13); // обороты в минуту
 }
 
+/* открываем воду, но не меняем позицию */
+void water_open_p() {
+	stepper.step(-1 * stepper_d);
+}
+
 void water_open(int n) {
 	if (stepper_position + n > stepper_max) {
 		n = stepper_max - stepper_position;
 	}
 	stepper_position = stepper_position + n;
-	stepper.step(n * stepper_d);
+	stepper.step(-1 * n * stepper_d);
 	Serial.print("water_open");
 	Serial.println(n * stepper_d);
+}
+
+/* прикрываем воду, но не меняем позицию */
+void water_close_p() {
+	stepper.step(stepper_d);
 }
 
 void water_close(int n) {
@@ -29,7 +39,7 @@ void water_close(int n) {
 		n = stepper_position;
 	}
 	stepper_position = stepper_position - n;
-	stepper.step(-1 * n * stepper_d);
+	stepper.step(n * stepper_d);
 	Serial.print("water_close");
 	Serial.println(-1 * n * stepper_d);
 }

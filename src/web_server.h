@@ -175,11 +175,19 @@ void handle_OnConnect() {
 }
 
 void handle_water_open() {
-	server.send(200, "text/html", task_water(1));
+	if (server.hasArg("pos")) {
+		server.send(200, "text/html", task_water(1, 0));
+	} else {
+		server.send(200, "text/html", task_water(1, 1));
+	}
 }
 
 void handle_water_close() {
-	server.send(200, "text/html", task_water(-1));
+	if (server.hasArg("pos")) {
+		server.send(200, "text/html", task_water(-1, 0));
+	} else {
+		server.send(200, "text/html", task_water(-1, 1));
+	}
 }
 
 void handle_change_temp() {
@@ -199,7 +207,7 @@ void handle_change_ten() {
 }
 
 void handle_debug_temp() {
-	server.send(200, "text/html", debug_temp() );
+	server.send(200, "text/html", debug_temp());
 }
 
 void handle_NotFound() {
