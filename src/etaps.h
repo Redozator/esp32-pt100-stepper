@@ -123,22 +123,22 @@ void etap4() {
 		if (tempers[POINTS - 1] > limit_max) {
 			// превышен максимум, уменьшаем тэн
 			dimmer_critic = dimmer_val;
-			dimmer_val -= 3;
+			dimmer_val -= 1;
 			if (dimmer_val < 0) {
 				dimmer_val = 0;
 			}
 			dimmer.setPower(dimmer_val);
-			stepper_pause = 5;
+			stepper_pause = 2;
 			return;
 		}
-		if (prognoz2 - tempers[POINTS - 1] > 2) {
+		if (prognoz2 - tempers[POINTS - 1] > 3) {
 			// тенденция к увеличению. нужно уменьшить диммер
 			dimmer_val--;
 			if (dimmer_val < 0) {
 				dimmer_val = 0;
 			}
 			dimmer.setPower(dimmer_val);
-			stepper_pause = 5;
+			stepper_pause = 3;
 			return;
 		}
 	}
@@ -149,7 +149,7 @@ void etap4() {
 			water_close(1); // прикроем заслонку
 		}
 		dimmer.setPower(dimmer_val);
-		stepper_pause = 5;
+		stepper_pause = 3;
 		return;
 	}
 
