@@ -111,6 +111,7 @@ void etap4() {
 				temp_temp = tempers[POINTS - 1]; // пока не переходим на этап 3, но готовимся
 			} else {
 				if (temp_temp > tempers[POINTS - 1]) { // температура продолжает падать, уходим на этап 3
+					dimmer_critic = 95;
 					temp_temp = 0;
 					current_etap = 3;
 					Serial.println("Возвращаемся на этап 3");
@@ -144,6 +145,9 @@ void etap4() {
 	}
 	if (tempers[POINTS - 1] < limit_min) {
 		dimmer_val++; // увеличим диммер
+		if (dimmer_val > dimmer_critic) {
+			dimmer_val = dimmer_critic;
+		}
 		if (dimmer_val > 95) {
 			dimmer_val = 95;
 			water_close(1); // прикроем заслонку
