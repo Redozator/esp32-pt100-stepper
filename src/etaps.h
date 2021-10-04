@@ -14,7 +14,8 @@ void etap1() {
 	if (tempers[POINTS - 1] > PRED_LIMIT) {
 		// диммер - на низкое значение
 		dimmer_val = dimmer_low;
-		dimmer.setPower(dimmer_val);
+		// dimmer.setPower(dimmer_val);
+		relay.setPWM(dimmer_val*2.55);
 		// открываем заслонку на максимум
 		water_open(stepper_max / 2);
 		stepper_pause = 10;
@@ -39,7 +40,8 @@ void etap2() {
 				if (dimmer_val < 0) {
 					dimmer_val = 0;
 				}
-				dimmer.setPower(dimmer_val);
+				// dimmer.setPower(dimmer_val);
+				relay.setPWM(dimmer_val*2.55);
 			}
 			return;
 		}
@@ -47,7 +49,8 @@ void etap2() {
 		if (dimmer_val < 0) {
 			dimmer_val = 0;
 		}
-		dimmer.setPower(dimmer_val);
+		// dimmer.setPower(dimmer_val);
+		relay.setPWM(dimmer_val*2.55);
 		stepper_pause = 5;
 		current_etap = 3;
 		Serial.println("Переход на этап 3");
@@ -58,7 +61,8 @@ void etap2() {
 		if (dimmer_val > 95) {
 			dimmer_val = 95;
 		}
-		dimmer.setPower(dimmer_val);
+		// dimmer.setPower(dimmer_val);
+		relay.setPWM(dimmer_val*2.55);
 		stepper_pause = 4;
 		return;
 	}
@@ -89,7 +93,8 @@ void etap3() {
 			dimmer_val = 95;
 			water_close(1); // прикроем заслонку
 		}
-		dimmer.setPower(dimmer_val);
+		// dimmer.setPower(dimmer_val);
+		relay.setPWM(dimmer_val*2.55);
 		stepper_pause = 4;
 	}
 }
@@ -105,7 +110,8 @@ void etap4() {
 			if (dimmer_val > dimmer_critic) {
 				dimmer_val = dimmer_critic;
 			}
-			dimmer.setPower(dimmer_val);
+			// dimmer.setPower(dimmer_val);
+			relay.setPWM(dimmer_val*2.55);
 			stepper_pause = 4;
 			if (temp_temp == 0 || temp_temp < tempers[POINTS - 1]) {
 				temp_temp = tempers[POINTS - 1]; // пока не переходим на этап 3, но готовимся
@@ -128,7 +134,8 @@ void etap4() {
 			if (dimmer_val < 0) {
 				dimmer_val = 0;
 			}
-			dimmer.setPower(dimmer_val);
+			// dimmer.setPower(dimmer_val);
+			relay.setPWM(dimmer_val*2.55);
 			stepper_pause = 2;
 			return;
 		}
@@ -138,7 +145,8 @@ void etap4() {
 			if (dimmer_val < 0) {
 				dimmer_val = 0;
 			}
-			dimmer.setPower(dimmer_val);
+			// dimmer.setPower(dimmer_val);
+			relay.setPWM(dimmer_val*2.55);
 			stepper_pause = 3;
 			return;
 		}
@@ -152,7 +160,8 @@ void etap4() {
 			dimmer_val = 95;
 			water_close(1); // прикроем заслонку
 		}
-		dimmer.setPower(dimmer_val);
+		// dimmer.setPower(dimmer_val);
+		relay.setPWM(dimmer_val*2.55);
 		stepper_pause = 3;
 		return;
 	}

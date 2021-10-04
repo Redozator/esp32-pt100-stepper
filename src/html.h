@@ -1,5 +1,5 @@
 
-#include "RBDmcuESP32.h"
+//#include "RBDmcuESP32.h"
 
 
 // температуру в график
@@ -81,7 +81,8 @@ String change_temp(String min, String max) {
 
 String change_ten(String s_dimmer_val) {
 	dimmer_val = atoi(s_dimmer_val.c_str());
-	dimmer.setPower(dimmer_val);
+	// dimmer.setPower(dimmer_val);
+	relay.setPWM(dimmer_val*2.55);
 	String ptr = "<!DOCTYPE html> <html>\n\
   <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
    <head>\n\
@@ -187,7 +188,7 @@ String SendHTML() {
 }
 
 String debug_temp() {
-	char TempString[10];
+	// char TempString[10];
 	String ptr = "<!DOCTYPE html> <html>\n\
   <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
    <head>\n\
@@ -199,6 +200,7 @@ String debug_temp() {
    </head>\n\
 \n\
    <body>\n ";
+	/*
 	unsigned long a = dimmer.getDebug_timer();
 	if (a == 0) {
 		a = 1;
@@ -211,7 +213,7 @@ String debug_temp() {
 			double t = (double) round(10 * (debug_temper[i] / 7.15 + 15.4)) / 10;
 			ptr += "<div>" + String(debug_temper[i]) + " " + dtostrf(t, 4, 2, TempString) + "</div>\n";
 		}
-	}
+	} */
 	ptr += "</body>\n\
 </html>\n\
 ";
