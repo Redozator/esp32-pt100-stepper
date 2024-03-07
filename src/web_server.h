@@ -18,6 +18,7 @@ void handle_change_temp();
 void handle_change_ten();
 void handle_debug_temp();
 void handle_NotFound();
+void handle_change_etap();
 
 /*
  * Login page
@@ -132,6 +133,7 @@ void webserver_init() {
 	server.on("/water_close", handle_water_close);
 	server.on("/change_temp", handle_change_temp);
 	server.on("/change_ten", handle_change_ten);
+	server.on("/change_etap", handle_change_etap);
 	server.on("/ota", HTTP_GET, []() {
 		server.sendHeader("Connection", "close");
 		server.send(200, "text/html", loginIndex);
@@ -212,4 +214,12 @@ void handle_debug_temp() {
 
 void handle_NotFound() {
 	server.send(404, "text/plain", "Not found");
+}
+
+void handle_change_etap() {
+	if (server.hasArg("etap")) {
+		server.send(200, "text/html", change_etap(server.arg("etap")));
+	} else {
+		server.send(200, "text/plain", "etap not found ");
+	}
 }
