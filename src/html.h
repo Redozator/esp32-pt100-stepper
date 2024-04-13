@@ -126,10 +126,6 @@ String SendHTML() {
       <a href='/water_open?pos=0' class=\"btn btn-success\">Открыть воду без изменения номера позиции</a><a href='/water_close?pos=0' class=\"btn btn-danger mx-3\">Прикрыть воду без изменения номера позиции</a>\n\
       <div class=\"container-fluid py-3\">\n\
       Этап: " + String(current_etap) + " \n\
-			<form action='/change_etap'>\n\
-      Изменить этап, (1-5) <input type='text' name='etap' value=''> (этап 5 - ручной режим) \n\
-      <input type='submit' value='Сохранить'>\n\
-      </form>\n\
       <form action='/change_ten'>\n\
       Мощность нагрева, % (1-95) <input type='text' name='dimmer_val' value='" + String(dimmer_val) + "'> \n\
       <input type='submit' value='Сохранить'>\n\
@@ -168,9 +164,9 @@ String SendHTML() {
                hAxis: {\n\
                   title: 'Время'\n\
                },\n\
-               vAxis: {\n\
-                  0: {title: 'Заслонка'},\n\
-                  1: {title: 'Температура'}\n\
+               vAxes: {\n\
+                  0: {title: 'Мощность'},\n\
+                  1: {title: 'Температура', minValue: "+String(round(chart_y[CNT_CHART-1])-10)+", maxValue: "+String(round(chart_y[CNT_CHART-1])+10)+"}\n\
                },   \n\
 //               trendlines: {\n\
 //               0:{type: 'polynomial', degree: 5, color: '#333', opacity: 1, visibleInLegend: false}\n\
@@ -219,27 +215,6 @@ String debug_temp() {
 		}
 	} */
 	ptr += "</body>\n\
-</html>\n\
-";
-	return ptr;
-}
-
-String change_etap(String s_etap) {
-	int etap = atoi(s_etap.c_str());
-	if (etap>0 && etap<6) {
-		current_etap = etap;
-	}
-	String ptr = "<!DOCTYPE html> <html>\n\
-  <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
-   <head>\n\
-      <title>change etap</title>\n\
-   </head>\n\
-\n\
-   <body>\n\
-      <script language = 'JavaScript'>\n\
-        window.location.href = \"/\";\n\
-      </script>\n\
-   </body>\n\
 </html>\n\
 ";
 	return ptr;

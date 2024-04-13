@@ -19,32 +19,29 @@ LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x3F for a 16 chars
 int _state = 0;
 int _cycle = 0;
 
-void setup() {
-  hw_timer_t * timer = NULL;
-  timer = timerBegin(0, 80, true);
-  timerAttachInterrupt(timer, &onTimerISR, true);
-  timerAlarmWrite(timer, 100, true); // вызов таймера через каждые 100 микросекунд
-  timerAlarmEnable(timer);
+void IRAM_ATTR onTimerISR() {
+  relay.tick();
+}
 
-	
+void setup() {
   Serial.begin(115200);
   lcd.init();                      // initialize the lcd
   lcd.backlight();
   lcd.setCursor(0, 0);
-  relay.setLevel(HIGH);
+  relay.setLevel(LOW);
   relay.setPeriod(1000);
   relay.setPWM(dimmer_val*2.55);
 //  dimmer.begin(NORMAL_MODE, ON);
 //  dimmer.setPower(dimmer_val);
   webserver_init();
   stepper_setup();
-
-
   showtemp();
-}
 
-void IRAM_ATTR onTimerISR() {
-	relay.tick();
+  hw_timer_t * timer = NULL;
+  timer = timerBegin(0, 80, true);
+  timerAttachInterrupt(timer, &onTimerISR, true);
+  timerAlarmWrite(timer, 1000, true); // вызов таймера через каждые 1000 микросекунд
+  timerAlarmEnable(timer);
 }
 
 void loop() {
