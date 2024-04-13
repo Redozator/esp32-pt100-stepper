@@ -168,9 +168,9 @@ String SendHTML() {
                hAxis: {\n\
                   title: 'Время'\n\
                },\n\
-               vAxis: {\n\
-                  0: {title: 'Заслонка'},\n\
-                  1: {title: 'Температура'}\n\
+               vAxes: {\n\
+                  0: {title: 'Мощность'},\n\
+                  1: {title: 'Температура', minValue: "+String(round(chart_y[CNT_CHART-1])-10)+", maxValue: "+String(round(chart_y[CNT_CHART-1])+10)+"}\n\
                },   \n\
 //               trendlines: {\n\
 //               0:{type: 'polynomial', degree: 5, color: '#333', opacity: 1, visibleInLegend: false}\n\
